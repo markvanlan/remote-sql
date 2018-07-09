@@ -1,6 +1,36 @@
+doctype 
 html
   head
-    title Hello
+    title Database Explorer
+    link(rel='stylesheet', href='/styles.css')
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
+    script(src="index.js")
 
   body
-    h1 
+    form(
+      action="/mysql" 
+      method="post"
+      id="mysql_form"
+    )
+      label Host
+      input(
+        type='text'
+        name='host'
+        id='mysql-host'
+      )
+      label User
+      input(
+        type='text'
+        name='user'
+        id='mysql-user'
+      )
+      label Password
+      input(
+        type='password'
+        name='password'
+        id='mysql-password'
+      )
+      input(
+        type='submit'
+        value='Connect'
+      )

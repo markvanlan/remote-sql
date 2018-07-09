@@ -1,0 +1,28 @@
+input {
+  display: block;
+}
+
+.table {
+  display: block;
+  cursor:pointer;
+}
+
+#tables {
+  max-width:30%;
+  height:100%;
+  display: inline-block;
+  vertical-align: top;
+  overflow:scroll;
+}
+
+#data {
+  max-width: 70%;
+  height:100%;
+  display: inline-block;
+  vertical-align: top;
+  overflow:scroll;
+}
+
+tr {
+  border: 1px solid gray;
+}
