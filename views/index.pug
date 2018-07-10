@@ -5,32 +5,35 @@ html
     link(rel='stylesheet', href='/styles.css')
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
     script(src="index.js")
+    link(href="https://fonts.googleapis.com/css?family=Raleway:600" rel="stylesheet")
 
-  body
-    form(
+  body.bg-gradient
+    form.panel.overflow-hidden(
       action="/mysql" 
       method="post"
       id="mysql_form"
     )
-      label Host
+      label.large Connect To Your Database
       input(
         type='text'
         name='host'
         id='mysql-host'
+        placeholder='Host'
       )
-      label User
+
       input(
         type='text'
         name='user'
         id='mysql-user'
+        placeholder='User'
       )
-      label Password
       input(
         type='password'
         name='password'
         id='mysql-password'
+        placeholder='Password'
       )
-      input(
+      input.submit(
         type='submit'
         value='Connect'
       )
