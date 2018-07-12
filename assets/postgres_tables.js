@@ -8,7 +8,7 @@ let getDataForTable = function(table) {
   $('#data').empty()
   var pageURL = window.location.href;
   var db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-  url = "/mysql/"+db+"/table/"+table.innerHTML
+  url = "/postgres/"+db+"/table/"+table.innerHTML
   $.get(url, function(data){
     createTableFromData(data[0], data[1])
   })
@@ -27,7 +27,7 @@ function createTableFromData(details, data) {
 function createHeaderRow(details) {
   let html = "<tr id='data-headers'>"
   for(let i=0;i<details.length;i++) {
-    html = html + "<th>" + details[i].Field + "</th>"
+    html = html + "<th>" + details[i].column_name + "</th>"
   }
   return(html = html + "</tr>")
 }
