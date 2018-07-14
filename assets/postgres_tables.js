@@ -1,7 +1,7 @@
 let lastRow = 0;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-  document.getElementById('tables').children[lastRow].style.backgroundColor = '#ffdce2'
+  document.getElementById('tables').children[lastRow].style.backgroundColor = '#ffbfbf'
 });
 
 let getDataForTable = function(table) {
@@ -51,7 +51,7 @@ function highlightCorrectTable(newRow) {
   if (newRow == lastRow)
     return
   let table = document.getElementById('tables')
-  table.children[newRow].style.backgroundColor = '#ffdce2'
+  table.children[newRow].style.backgroundColor = '#ffbfbf'
   table.children[lastRow].style.backgroundColor = ''
   lastRow = newRow;
 }

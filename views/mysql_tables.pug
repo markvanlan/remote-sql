@@ -1,15 +1,37 @@
 html
   head
-    title Database Explorer
+    title= "DB - " + database
     link(rel='stylesheet', href='/styles.css')
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
     script(src="/mysql_tables.js", type="text/javascript")
   
   body
+    .data-header 
+      h1(style="display:inline-block;")= database
+      .limits#update(style="cursor:pointer")
+        div Update
+      .limits#clear(style="cursor:pointer")
+        div Clear
+
+      .limits
+        label Limits
+        input#start
+        label -
+        input#end
+        label
+        label Total
+        input#count(readonly="true")
+
+      .limits(style="cursor:pointer")
+        div Custom Query
+
     ul(id='tables')
       for table in tables      
-        a.table(onclick=`getDataForTable(this)`)
+        a.table(onclick=`getDataForTable(this, true)`)
           = table
 
     table(id='data')
-        
+
+    div(id='modal-bg', style='display:none;', onclick='closeModal()')
+    div(id='modal', style='display:none;')
+      table(id='modal-table')
