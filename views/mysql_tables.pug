@@ -4,6 +4,7 @@ html
     link(rel='stylesheet', href='/styles.css')
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
     script(src="/mysql_tables.js", type="text/javascript")
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet')
   
   body
     .data-header 
@@ -35,3 +36,6 @@ html
     div(id='modal-bg', style='display:none;', onclick='closeModal()')
     div(id='modal', style='display:none;')
       table(id='modal-table')
+      .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-top:5px;") Close
+      .btn.btn-primary(onclick='saveModalData()', style="float:right; margin-right:6px; margin-top:5px;") Save
+      

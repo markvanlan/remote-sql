@@ -122,16 +122,20 @@ function showModal(data){
     html = html + "<tr>"
     let div = tds[i].children[0]
     let column_name = div.dataset[Object.keys(div.dataset)[0]]
-    html = html + "<td>"+column_name+"</td><td><input value="+div.innerHTML+"></td>"
+    html = html + "<td>"+column_name+"</td><td><textarea>"+div.innerHTML+"</textarea></td>"
     html = html + "</tr>"
   }
-  $('#modal-bg').fadeIn()
-  $('#modal').fadeIn()
+  $('#modal-bg').fadeIn(200)
+  $('#modal').fadeIn(200)
   $('#modal-table').append(html)
 }
 
 function closeModal() {
-  $('#modal-bg').fadeOut()
-  $('#modal').fadeOut()
+  $('#modal-bg').fadeOut(200)
+  $('#modal').fadeOut(200)
   $('#modal-table').empty()  
+}
+
+function saveModalData(data){
+
 }

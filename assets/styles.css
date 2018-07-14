@@ -1,3 +1,5 @@
+* { font-family: 'Open Sans', sans-serif; }
+
 body {
   margin:1px;
   padding:0;
@@ -25,6 +27,24 @@ a {
   background: linear-gradient(90deg,#bfd3ff,#5578da);  
 }
 
+.btn {
+  display: inline-block;
+  line-height: 32px;
+  font-size:14px;
+  padding:0 10px;
+  border-radius: 4px;
+  cursor:pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color:white;
+}
+
+.btn-secondary {
+  color:white;
+  background-color: #6c757d;
+}
 
 .bg-salmon {
   background: #ff5d4d;
@@ -152,7 +172,7 @@ form input.submit {
   color:#00440f;
 }
 
-#tables a { padding-left:20px; }
+#tables a { padding-left:20px; font-size:13px ;}
 
 #data {
   width: calc(100% - 220px);
@@ -244,7 +264,7 @@ table th {
 
 #modal {
   position:absolute;
-  width:300px;
+  max-width:500px;
   max-height:500px;
   top:50%;
   left:50%;
