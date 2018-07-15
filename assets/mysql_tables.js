@@ -115,13 +115,16 @@ function addOnclickToRow() {
 }
 
 // MODAL FUNCTIONS
-function showModal(data){
+function showModal(data){  
+  $('#modal-table').empty()  
+  $('#modal-table').removeData()
   let tds = data.children
   let html; 
   for(let i=0;i<tds.length;i++){    
     html = html + "<tr>"
     let div = tds[i].children[0]
     let column_name = div.dataset[Object.keys(div.dataset)[0]]
+    $('#modal-table').data(column_name, div.innerHTML)
     html = html + "<td>"+column_name+"</td><td><textarea>"+div.innerHTML+"</textarea></td>"
     html = html + "</tr>"
   }
@@ -133,9 +136,28 @@ function showModal(data){
 function closeModal() {
   $('#modal-bg').fadeOut(200)
   $('#modal').fadeOut(200)
-  $('#modal-table').empty()  
 }
 
-function saveModalData(data){
-
+function saveModalData(){
+  let newValues = {}
+  let rows = $('#modal-table > tbody > tr')
+  for(let i=0;i<rows.length;i++){
+    newValues[rows[i].children[0].innerHTML] = rows[i].children[1].children[0].value
+  }
+  let data = { 
+    originalValues: $('#modal-table').data(),
+    newValues: newValues
+  }
+  var pageURL = window.location.href;
+  var db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+  url = "/mysql/"+db+"/table/"+currentTable.innerHTML+"/row_update"
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: data,
+    success: function(){
+      console.log("Saved")
+    },
+    dataType: "JSON"
+  });
 }

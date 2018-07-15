@@ -62,6 +62,7 @@ a {
   background:white;
   border-radius:8px 0 0 8px;
   overflow-y:scroll;
+  z-index:2;
 }
 
 .overflow-hidden {
@@ -262,21 +263,10 @@ table th {
   background:rgba(0,0,0,.5);
 }
 
-#modal {
-  position:absolute;
-  max-width:500px;
-  max-height:500px;
-  top:50%;
-  left:50%;
-  z-index:2;
-  transform:translate(-50%,-50%);
-  overflow-y:auto;
-  background:white;
-  padding:20px;
-  border-radius:10px;
+#modal-table textarea{
+  padding-left:10px;
+  width:200px;
+  height:40px;
 }
 
-
-#modal-table{
-
-}
+#modal-table td { max-width:250px; }

@@ -34,8 +34,8 @@ html
     table(id='data')
 
     div(id='modal-bg', style='display:none;', onclick='closeModal()')
-    div(id='modal', style='display:none;')
-      table(id='modal-table')
-      .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-top:5px;") Close
-      .btn.btn-primary(onclick='saveModalData()', style="float:right; margin-right:6px; margin-top:5px;") Save
+    .panel(id='modal', style='display:none;')
+      table(id='modal-table')      
+      .btn.btn-primary(onclick='saveModalData()', style="float:right; margin-top:5px;") Save
+      .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-right:4px; margin-top:5px;") Close
       
