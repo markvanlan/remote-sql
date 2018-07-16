@@ -1,6 +1,10 @@
-let lastRow = 0;
+let lastRow = 1;
 let limits;
 let currentTable;
+let currentSort = {
+  column: "NONE",
+  sort: "NONE"
+}
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   document.getElementById('tables').children[lastRow].style.backgroundColor = '#ffbfbf'
@@ -9,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   });
   $( "#clear" ).click(function() {
     getDataForTable(currentTable, true)
-  });
+  });  
+  getDataForTable($('#tables')[0].children[lastRow], true)
 });
 
 let getDataForTable = function(table, firstLoad) {
@@ -19,26 +24,29 @@ let getDataForTable = function(table, firstLoad) {
       offset:1,
       count:100,
     }
+    currentSort.column = "NONE"
+    currentSort.sort = "NONE"
   } 
-  else {
+  else
     getLimitsFromInputs()
-  }
+
   $('#data').empty()
-  var pageURL = window.location.href;
-  var db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-  url = "/mysql/"+db+"/table/"+table.innerHTML+"/"+limits.offset+"/"+limits.count
+  let pageURL = window.location.href;
+  let db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+  url = "/mysql/"+db+"/table/"+table.innerHTML+"/"+limits.offset+"/"+limits.count+"/"+currentSort.column+"/"+currentSort.sort
   $.get(url, function(data){    
     createTableFromData(data[0], data[1])
     updateTableRowCount(data[2][0]["COUNT(*)"])
     if (firstLoad && data[2][0]["COUNT(*)"] < 100)
       limits.count = data[2][0]["COUNT(*)"] - 1
     fillLimitInputs()
-  })
-  for(let i=0;i<table.parentNode.children.length;i++){
-    if (table.parentNode.children[i] == table) {
-      highlightCorrectTable(i)
+    for(let i=0;i<table.parentNode.children.length;i++){
+      if (table.parentNode.children[i] == table) {
+        highlightCorrectTable(i)
+      }
     }
-  }
+    updateColumnSortIndicator()
+  })
 }
 
 function createTableFromData(details, data) {
@@ -59,7 +67,7 @@ function createDataRows(data) {
   let html = ""
   for(let i=0;i<data.length;i++) {
     html = html + "<tr>"
-    for (var key in data[i]) {
+    for (let key in data[i]) {
       html = html + "<td><div class='data-row' data-column="+key+">" + data[i][key] + "</div></td>"
     }
     for(let y=0;y<data[i].length;y++){
@@ -68,10 +76,6 @@ function createDataRows(data) {
     html = html + "</tr>"
   }
   return(html)
-}
-
-function addOnlick(data){
-  console.log(data)
 }
 
 function highlightCorrectTable(newRow) {
@@ -93,8 +97,8 @@ function getLimitsFromInputs() {
   limits.offset = parseInt($('#start').val())  
   if (limits.offset < 1)
     limits.offset = 1
-  limits.count = parseInt($('#end').val() - limits.offset)
-  if (limits.count < limits.offset){
+  limits.count = parseInt($('#end').val()) - limits.offset
+  if (parseInt($('#end').val()) <= limits.offset){
     limits.count = 100
     limits.offset = 1
   }
@@ -107,11 +111,56 @@ function fillLimitInputs() {
 
 function addOnclickToRow() {
   let rows = $('#data').find('tr')
+  for(let i=0;i<rows[0].children.length;i++){
+    $(rows[0].children[i]).click(function(){
+      updateTableSort(rows[0].children[i])
+    })
+  }
   for(let i=1;i<rows.length;i++){
     $(rows[i]).click(function(){
       showModal(rows[i])
     })
   }
+}
+
+function updateTableSort(column) {
+  let td = column
+  let columnName = $(td).contents().get(0).nodeValue
+
+  if (currentSort.column == columnName) {
+    if (currentSort.sort == "NONE")
+      currentSort.sort = "ASC"
+    else if (currentSort.sort == "ASC")
+      currentSort.sort = "DESC"
+    else if (currentSort.sort = "DESC")
+      currentSort.sort = "NONE"
+  }
+  else {
+      currentSort.column = columnName
+      currentSort.sort = "ASC"
+  }
+  getDataForTable(currentTable)
+}
+
+function updateColumnSortIndicator() {
+  $('#sort-indicator').remove() // Remove the arrow from wherever it was
+  let tds = $("#data-headers")[0].children
+  let td;
+  if (currentSort.column == "NONE")
+    return
+  for(let i=0;i<tds.length;i++){
+    if (tds[i].innerHTML == currentSort.column)
+      td = tds[i]
+  }
+  let indicator = document.createElement('span')
+  indicator.style.marginLeft = "5px"
+  indicator.id = 'sort-indicator'
+  indicator.innerHTML = ""
+  if (currentSort.sort == "ASC")
+    indicator.innerHTML = "↓"
+  else if (currentSort.sort == "DESC")
+    indicator.innerHTML = "↑"
+  td.appendChild(indicator)
 }
 
 // MODAL FUNCTIONS
@@ -148,8 +197,8 @@ function saveModalData(){
     originalValues: $('#modal-table').data(),
     newValues: newValues
   }
-  var pageURL = window.location.href;
-  var db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+  let pageURL = window.location.href;
+  let db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
   url = "/mysql/"+db+"/table/"+currentTable.innerHTML+"/row_update"
   $.ajax({
     type: "POST",
@@ -160,4 +209,6 @@ function saveModalData(){
     },
     dataType: "JSON"
   });
+  getDataForTable(currentTable, false)
+  closeModal()
 }
