@@ -54,7 +54,6 @@ let getDataForTable = function(table, firstLoad, customQuery) {
 }
 
 function handleRowsFromServer(data, firstLoad) {
-  console.log(data)
   createTableFromData(data[0], data[1])
   updateTableRowCount(data[2][0]["COUNT(*)"])
   if (firstLoad && data[2][0]["COUNT(*)"] < 100)
