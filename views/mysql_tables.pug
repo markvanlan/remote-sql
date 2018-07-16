@@ -23,7 +23,7 @@ html
         label Total
         input#count(readonly="true")
 
-      .limits(style="cursor:pointer")
+      .limits#query(style="cursor:pointer")
         div Custom Query
 
     ul(id='tables')
@@ -37,5 +37,17 @@ html
     .panel(id='modal', style='display:none;')
       table(id='modal-table')      
       .btn.btn-primary(onclick='saveModalData()', style="float:right; margin-top:5px;") Save
+      .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-right:4px; margin-top:5px;") Close
+    .panel.panel-wide(id='custom-query-modal', style='display:none;')
+      select(id="query-type", onchange="customQueryTypeChanged(this.options[this.selectedIndex].value)")
+      select(id="query-comparator")
+        option(value="<") <
+        option(value=">") >
+        option(value="=") =
+        option(value="LIKE") Contains
+
+      input(id='query-input')
+      br
+      .btn.btn-primary(onclick='sendCustomQuery()', style="float:right; margin-top:5px;") Apply
       .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-right:4px; margin-top:5px;") Close
       

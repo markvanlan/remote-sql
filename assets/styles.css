@@ -37,13 +37,13 @@ a {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: #389cff;
   color:white;
 }
 
 .btn-secondary {
   color:white;
-  background-color: #6c757d;
+  background-color: #e89595;
 }
 
 .bg-salmon {
@@ -54,7 +54,7 @@ a {
   text-align: center;
   position: absolute;
   width:360px;
-  max-height:400px;
+  max-height:70%;
   left:50%;
   top:50%;
   transform: translate(-50%,-50%);
@@ -63,6 +63,10 @@ a {
   border-radius:8px 0 0 8px;
   overflow-y:scroll;
   z-index:2;
+}
+
+.panel-wide {
+  width:500px;
 }
 
 .overflow-hidden {
@@ -173,7 +177,7 @@ form input.submit {
   color:#00440f;
 }
 
-#tables a { padding-left:20px; font-size:13px ;}
+#tables a { padding-left:20px; font-size:13px; line-height: 26px;}
 
 #data {
   width: calc(100% - 220px);
@@ -237,6 +241,7 @@ ul.panel {
 
 .data-row{
   max-height:40px;
+  margin:0 5px;
   overflow-y:hidden;
 }
 
@@ -249,10 +254,10 @@ table th {
   padding:5px;
 }
 
-#data tr { cursor: pointer; transition:background:.2s; }
+#data tr { cursor: pointer; transition:background .1s; height: 34px; }
 #data tr:nth-child(odd) { background: #e8e8e8; }
-#data tr:first-child { background-color:#ffbfbf; }
-#data tr:hover { background:#ffbfbf; }
+#data tr:first-child { background-color:#a9d3fd; }
+#data tr:hover { background:#a9d3fd; }
 
 #modal-bg {
   position: fixed;
@@ -267,7 +272,6 @@ table th {
   width:unset;
 }
 
-
 #modal-table textarea{
   padding-left:10px;
   width:200px;
@@ -275,3 +279,5 @@ table th {
 }
 
 #modal-table td { max-width:250px; }
+
+#query-input {width:250px;}

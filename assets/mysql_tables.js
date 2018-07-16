@@ -1,29 +1,38 @@
-let lastRow = 1;
-let limits;
 let currentTable;
+let currentDatabase;
+let currentColumns = []
 let currentSort = {
   column: "NONE",
   sort: "NONE"
 }
+let limits = {
+  offset: 1,
+  count:100
+}
+let lastRow = 1;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-  document.getElementById('tables').children[lastRow].style.backgroundColor = '#ffbfbf'
+  currentDatabase = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+
+  document.getElementById('tables').children[lastRow].style.backgroundColor = '#a9d3fd'
   $( "#update" ).click(function() {
     getDataForTable(currentTable, false)
   });
   $( "#clear" ).click(function() {
     getDataForTable(currentTable, true)
   });  
+  $( "#query" ).click(function() {
+    showCustomQuery()
+  });
   getDataForTable($('#tables')[0].children[lastRow], true)
 });
 
-let getDataForTable = function(table, firstLoad) {
+let getDataForTable = function(table, firstLoad, customQuery) {
   currentTable = table;
+  currentColumns = []
   if (firstLoad) {
-    limits = {
-      offset:1,
-      count:100,
-    }
+    limits.offset = 1
+    limits.count = 100
     currentSort.column = "NONE"
     currentSort.sort = "NONE"
   } 
@@ -31,22 +40,42 @@ let getDataForTable = function(table, firstLoad) {
     getLimitsFromInputs()
 
   $('#data').empty()
-  let pageURL = window.location.href;
-  let db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-  url = "/mysql/"+db+"/table/"+table.innerHTML+"/"+limits.offset+"/"+limits.count+"/"+currentSort.column+"/"+currentSort.sort
-  $.get(url, function(data){    
-    createTableFromData(data[0], data[1])
-    updateTableRowCount(data[2][0]["COUNT(*)"])
-    if (firstLoad && data[2][0]["COUNT(*)"] < 100)
-      limits.count = data[2][0]["COUNT(*)"] - 1
-    fillLimitInputs()
-    for(let i=0;i<table.parentNode.children.length;i++){
-      if (table.parentNode.children[i] == table) {
-        highlightCorrectTable(i)
-      }
+
+  url = "/mysql/"+currentDatabase+"/table/"+table.innerHTML+"/"+limits.offset+"/"+limits.count+"/"+currentSort.column+"/"+currentSort.sort
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: {query:customQuery},
+    success: function(result){
+      handleRowsFromServer(result, firstLoad)
+    },
+    dataType: "JSON"
+  });
+}
+
+function handleRowsFromServer(data, firstLoad) {
+  console.log(data)
+  createTableFromData(data[0], data[1])
+  updateTableRowCount(data[2][0]["COUNT(*)"])
+  if (firstLoad && data[2][0]["COUNT(*)"] < 100)
+    limits.count = data[2][0]["COUNT(*)"] - 1
+  fillLimitInputs()
+  for(let i=0;i<currentTable.parentNode.children.length;i++){
+    if (currentTable.parentNode.children[i] == currentTable) {
+      highlightCorrectTable(i)
     }
-    updateColumnSortIndicator()
-  })
+  }
+  updateColumnSortIndicator()
+}
+
+function getRowsWithCustomQuery(query) {
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: query,
+    success: success,
+    dataType: dataType
+  });
 }
 
 function createTableFromData(details, data) {
@@ -58,6 +87,7 @@ function createTableFromData(details, data) {
 function createHeaderRow(details) {
   let html = "<tr id='data-headers'>"
   for(let i=0;i<details.length;i++) {
+    currentColumns.push(details[i].Field)
     html = html + "<th>" + details[i].Field + "</th>"
   }
   return(html = html + "</tr>")
@@ -82,7 +112,7 @@ function highlightCorrectTable(newRow) {
   if (newRow == lastRow)
     return
   let table = document.getElementById('tables')
-  table.children[newRow].style.backgroundColor = '#ffbfbf'
+  table.children[newRow].style.backgroundColor = '#a9d3fd'
   table.children[lastRow].style.backgroundColor = ''
   lastRow = newRow;
 }
@@ -183,6 +213,7 @@ function showModal(data){
 }
 
 function closeModal() {
+  $('#custom-query-modal').fadeOut(200)
   $('#modal-bg').fadeOut(200)
   $('#modal').fadeOut(200)
 }
@@ -210,5 +241,31 @@ function saveModalData(){
     dataType: "JSON"
   });
   getDataForTable(currentTable, false)
+  closeModal()
+}
+
+function showCustomQuery() {
+  $('#query-type').empty()
+  $('#modal-bg').fadeIn(200)
+  $('#custom-query-modal').fadeIn(200)
+  for(let i=0;i<currentColumns.length;i++){
+    $('#query-type').append($("<option value='"+currentColumns[i]+"'>"+currentColumns[i]+"</option>"))
+  }
+}
+
+function customQueryTypeChanged(option) {
+  if(option == "raw")
+    $('#query-comparator').hide()
+  else
+    $('#query-comparator').show()
+}
+
+function sendCustomQuery() {
+  let query = ""
+  let type = $("#query-type").val()
+  let comparator = $("#query-comparator").val()
+  query = "SELECT * FROM "+currentTable.innerHTML+" WHERE "
+  query = query + type+" "+comparator+" '"+$('#query-input').val()+"'"
+  getDataForTable(currentTable, false, query)
   closeModal()
 }
