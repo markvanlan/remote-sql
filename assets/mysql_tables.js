@@ -183,18 +183,19 @@ function RowClick(currenttr, lock) {
   }
   if (window.event.button === 0) {
     if (!window.event.ctrlKey && !window.event.shiftKey) {
-      clearAllSelectedRows();
+      clearAllSelectedRows(currenttr);
       toggleRow(currenttr);
     }
     if (window.event.shiftKey) {
-      selectRowsBetweenIndexes([lastSelectedRow.rowIndex, currenttr.rowIndex])
+      selectRowsBetweenIndexes([currentSelectedRow.rowIndex, currenttr.rowIndex])
     }
   }
 }
 
-function toggleRow(row) {
-    row.className = row.className == 'selected' ? '' : 'selected';
-    lastSelectedRow = row;
+function toggleRow(row, selected) {
+  console.log(row.classList)
+    row.className = (row == currentSelectedRow && row.className == "selected") ? '' : 'selected';
+    currentSelectedRow = row;
 }
 
 function selectRowsBetweenIndexes(indexes) {
@@ -208,9 +209,9 @@ function selectRowsBetweenIndexes(indexes) {
   }
 }
 
-function clearAllSelectedRows() {
+function clearAllSelectedRows(except) {
   for (var i = 0; i < dataRows.length; i++) {
-    dataRows[i].className = '';
+    except != dataRows[i] ? dataRows[i].className = '' : null;
   }
 }
 
@@ -256,12 +257,6 @@ function updateColumnSortIndicator() {
   else if (currentSort.sort == "DESC")
     indicator.innerHTML = "↑"
   td.appendChild(indicator)
-}
-
-function createRowDataObjectFromTd (row) {
-  for(let i=0; i<$(row).children.length;i++){
-    
-  }
 }
 
 // MODAL FUNCTIONS
