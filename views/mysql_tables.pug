@@ -8,11 +8,11 @@ html
   
   body
     .data-header 
-      h1(style="display:inline-block;")= database
-      .limits#update(style="cursor:pointer")
-        div Update
+      h1(style="display:inline-block;")= database      
       .limits#clear(style="cursor:pointer")
         div Clear
+      .limits#update(style="cursor:pointer")
+        div Update
 
       .limits
         label Limits
@@ -32,13 +32,20 @@ html
           = table
 
     table(id='data')
+    .floating-btn(id="edit-btn", style="display:none;")
+      img(src='/edit.svg')
+    .floating-btn(id="delete-btn", style="display:none;")
+      img(src='/delete.svg')
+
 
     div(id='modal-bg', style='display:none;', onclick='closeModal()')
     .panel(id='modal', style='display:none;')
       table(id='modal-table')      
       .btn.btn-primary(onclick='saveModalData()', style="float:right; margin-top:5px;") Save
       .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-right:4px; margin-top:5px;") Close
+
     .panel.panel-wide(id='custom-query-modal', style='display:none;')
+      h3 Custom Query
       select(id="query-type", onchange="customQueryTypeChanged(this.options[this.selectedIndex].value)")
       select(id="query-comparator")
         option(value="<") <

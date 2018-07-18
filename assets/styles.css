@@ -37,13 +37,13 @@ a {
 }
 
 .btn-primary {
-  background: #389cff;
+  background: #3b9dff;
   color:white;
 }
 
 .btn-secondary {
   color:white;
-  background-color: #e89595;
+  background-color: #da5555;
 }
 
 .bg-salmon {
@@ -257,7 +257,7 @@ table th {
 #data tr { cursor: pointer; transition:background .1s; height: 34px; }
 #data tr:nth-child(odd) { background: #e8e8e8; }
 #data tr:first-child { background-color:#a9d3fd; }
-#data tr:hover { background:#a9d3fd; }
+#data tr:hover { background:#c8e4ff; }
 
 #modal-bg {
   position: fixed;
@@ -281,3 +281,19 @@ table th {
 #modal-table td { max-width:250px; }
 
 #query-input {width:250px;}
+
+.selected { background: #a9d3fd !important;}
+.floating-btn {
+  position: fixed;
+  width:30px;
+  height:30px;
+  border-radius:100%;
+  padding:10px;
+  bottom:30px;
+  cursor: pointer;
+}
+.floating-btn img { width:20px; }
+#edit-btn { background:#3b9dff; right:80px; }
+#delete-btn { background:#da5555; right:22px; }
+#edit-btn img {margin:5px;}
+#delete-btn img {margin:2px 0 0 5px;}

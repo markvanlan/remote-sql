@@ -1,6 +1,8 @@
+let dataRows;
 let currentTable;
 let currentDatabase;
 let currentColumns = []
+let currentSelectedRow;
 let currentSort = {
   column: "NONE",
   sort: "NONE"
@@ -13,7 +15,6 @@ let lastRow = 1;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   currentDatabase = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-
   document.getElementById('tables').children[lastRow].style.backgroundColor = '#a9d3fd'
   $( "#update" ).click(function() {
     getDataForTable(currentTable, false)
@@ -24,6 +25,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   $( "#query" ).click(function() {
     showCustomQuery()
   });
+  $( "#edit-btn" ).click(function() {
+    showModal($('tr.selected')[0])
+  })
+  $( "#delete-btn" ).click(function() {
+    deleteSelectRows($('tr.selected'))
+  })
   getDataForTable($('#tables')[0].children[lastRow], true)
 });
 
@@ -48,6 +55,7 @@ let getDataForTable = function(table, firstLoad, customQuery) {
     data: {query:customQuery},
     success: function(result){
       handleRowsFromServer(result, firstLoad)
+      dataRows = document.getElementById('data').children[0].getElementsByTagName('tr');
     },
     dataType: "JSON"
   });
@@ -147,9 +155,67 @@ function addOnclickToRow() {
   }
   for(let i=1;i<rows.length;i++){
     $(rows[i]).click(function(){
-      showModal(rows[i])
+      RowClick(rows[i], false)
+      showControlsIfNeeded()
     })
   }
+}
+
+function showControlsIfNeeded(){
+  let selectedRows = $('tr.selected')
+  if (selectedRows.length == 0 ){
+    $('#edit-btn').fadeOut(100)
+    $('#delete-btn').fadeOut(100)
+  }
+  else if (selectedRows.length == 1){
+    $('#edit-btn').fadeIn(100)
+    $('#delete-btn').fadeIn(100)
+  }
+  else {
+    $('#edit-btn').fadeOut(100)
+    $('#delete-btn').fadeIn(100)
+  }
+}
+
+function RowClick(currenttr, lock) {
+  if (window.event.ctrlKey) {
+    toggleRow(currenttr);
+  }
+  if (window.event.button === 0) {
+    if (!window.event.ctrlKey && !window.event.shiftKey) {
+      clearAllSelectedRows();
+      toggleRow(currenttr);
+    }
+    if (window.event.shiftKey) {
+      selectRowsBetweenIndexes([lastSelectedRow.rowIndex, currenttr.rowIndex])
+    }
+  }
+}
+
+function toggleRow(row) {
+    row.className = row.className == 'selected' ? '' : 'selected';
+    lastSelectedRow = row;
+}
+
+function selectRowsBetweenIndexes(indexes) {
+  if (window.getSelection) {window.getSelection().removeAllRanges();}
+  else if (document.selection) {document.selection.empty();}
+  indexes.sort(function(a, b) {
+    return a - b;
+  });
+  for (var i = (indexes[0]); i <= indexes[1]; i++) {
+    dataRows[i].className = 'selected';
+  }
+}
+
+function clearAllSelectedRows() {
+  for (var i = 0; i < dataRows.length; i++) {
+    dataRows[i].className = '';
+  }
+}
+
+function deleteSelectRows(rows) {
+  console.log(rows)
 }
 
 function updateTableSort(column) {
@@ -190,6 +256,12 @@ function updateColumnSortIndicator() {
   else if (currentSort.sort == "DESC")
     indicator.innerHTML = "↑"
   td.appendChild(indicator)
+}
+
+function createRowDataObjectFromTd (row) {
+  for(let i=0; i<$(row).children.length;i++){
+    
+  }
 }
 
 // MODAL FUNCTIONS
