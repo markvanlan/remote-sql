@@ -1,7 +1,7 @@
 {
-  "name": "remote-sql",
+  "name": "dbexplorer",
   "version": "1.0.0",
-  "description": "Node.js on Docker",
+  "description": "A simple database explorer that can be used anywhere",
   "author": "Mark VanLandingham <markvanlan@gmail.com>",
   "main": "lib/server.js",
   "scripts": {

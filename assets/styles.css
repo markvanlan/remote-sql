@@ -239,7 +239,7 @@ ul.panel {
   background-color:#fff0f0;
 }
 
-.data-row{
+.data-cell{
   max-height:40px;
   margin:0 5px;
   overflow-y:hidden;

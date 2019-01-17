@@ -1,15 +1,60 @@
 html
   head
-    title Database Explorer
+    title= "dbexplorer - " + database
     link(rel='stylesheet', href='/styles.css')
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
-    script(src="/postgres_tables.js", type="text/javascript")
+    script(src="/mysql_tables.js", type="text/javascript")
     link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet')
   
   body
+    .data-header 
+      h1(style="display:inline-block;")= database      
+      .limits#clear(style="cursor:pointer")
+        div Clear
+      .limits#update(style="cursor:pointer")
+        div Update
+
+      .limits
+        label Limits
+        input#start
+        label -
+        input#end
+        label
+        label Total
+        input#count(readonly="true")
+
+      .limits#query(style="cursor:pointer")
+        div Custom Query
+
     ul(id='tables')
       for table in tables      
-        a.table(onclick=`getDataForTable(this)`)
-          = table.tablename
+        a.table(onclick=`getDataForTable(this, true)`)
+          = table
 
     table(id='data')
+    .floating-btn(id="edit-btn", style="display:none;")
+      img(src='/edit.svg')
+    .floating-btn(id="delete-btn", style="display:none;")
+      img(src='/delete.svg')
+
+
+    div(id='modal-bg', style='display:none;', onclick='closeModal()')
+    .panel(id='modal', style='display:none;')
+      table(id='modal-table')      
+      .btn.btn-primary(onclick='saveModalData()', style="float:right; margin-top:5px;") Save
+      .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-right:4px; margin-top:5px;") Close
+
+    .panel.panel-wide(id='custom-query-modal', style='display:none;')
+      h3 Custom Query
+      select(id="query-type", onchange="customQueryTypeChanged(this.options[this.selectedIndex].value)")
+      select(id="query-comparator")
+        option(value="<") <
+        option(value=">") >
+        option(value="=") =
+        option(value="LIKE") Contains
+
+      input(id='query-input')
+      br
+      .btn.btn-primary(onclick='sendCustomQuery()', style="float:right; margin-top:5px;") Apply
+      .btn.btn-secondary(onclick='closeModal()', style="float:right; margin-right:4px; margin-top:5px;") Close
+      

@@ -1,6 +1,7 @@
 let dataRows;
 let currentTable;
 let currentDatabase;
+let currentDatabaseType;
 let currentColumns = []
 let currentSelectedRow;
 let currentSort = {
@@ -15,6 +16,7 @@ let lastRow = 1;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   currentDatabase = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+  //  SET CURRENT DATABASE TYPE
   document.getElementById('tables').children[lastRow].style.backgroundColor = '#a9d3fd'
   $( "#update" ).click(function() {
     getDataForTable(currentTable, false)
@@ -52,7 +54,7 @@ let getDataForTable = function(table, firstLoad, customQuery) {
   $.ajax({
     type: "POST",
     url: url,
-    data: {query:customQuery},
+    data: {query: customQuery},
     success: function(result){
       handleRowsFromServer(result, firstLoad)
       dataRows = document.getElementById('data').children[0].getElementsByTagName('tr');
@@ -105,7 +107,7 @@ function createDataRows(data) {
   for(let i=0;i<data.length;i++) {
     html = html + "<tr>"
     for (let key in data[i]) {
-      html = html + "<td><div class='data-row' data-column="+key+">" + data[i][key] + "</div></td>"
+      html = html + "<td><div class='data-cell' data-column="+key+">" + data[i][key] + "</div></td>"
     }
     for(let y=0;y<data[i].length;y++){
       
@@ -192,7 +194,7 @@ function RowClick(currenttr, lock) {
   }
 }
 
-function toggleRow(row, selected) {
+function toggleRow(row) {
   console.log(row.classList)
     row.className = (row == currentSelectedRow && row.className == "selected") ? '' : 'selected';
     currentSelectedRow = row;
@@ -216,7 +218,30 @@ function clearAllSelectedRows(except) {
 }
 
 function deleteSelectRows(rows) {
-  console.log(rows)
+  if (rows.length < 1) return
+  var ids = []
+  for (var i = 0; i < rows.length; i++ ) {
+    var row = rows[i]
+    ids.push(Number(row.querySelector('[data-column="id"]').innerHTML))
+  }
+  let pageURL = window.location.href;
+  let db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+  url = "/mysql/"+db+"/table/"+currentTable.innerHTML+"/delete_records"
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: {ids: ids},
+    success: function(){
+      deleteRows(rows)
+    },
+    dataType: "JSON"
+  });
+}
+
+function deleteRows(rows) {
+  for ( var i = 0; i < rows.length; i++) {
+    rows[i].parentNode.removeChild(rows[i])
+  }
 }
 
 function updateTableSort(column) {
