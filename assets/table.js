@@ -16,8 +16,9 @@ let lastRow = 1;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   currentDatabase = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-  //  SET CURRENT DATABASE TYPE
-  document.getElementById('tables').children[lastRow].style.backgroundColor = '#a9d3fd'
+  currentDatabaseType = window.location.pathname.split('/')[1]
+
+  document.getElementById('tables').children[lastRow].style.backgroundColor = '#c6deea'
   $( "#update" ).click(function() {
     getDataForTable(currentTable, false)
   });
@@ -50,7 +51,7 @@ let getDataForTable = function(table, firstLoad, customQuery) {
 
   $('#data').empty()
 
-  url = "/mysql/"+currentDatabase+"/table/"+table.innerHTML+"/"+limits.offset+"/"+limits.count+"/"+currentSort.column+"/"+currentSort.sort
+  url = "/"+currentDatabaseType+"/"+currentDatabase+"/table/"+table.innerHTML+"/"+limits.offset+"/"+limits.count+"/"+currentSort.column+"/"+currentSort.sort
   $.ajax({
     type: "POST",
     url: url,
@@ -65,9 +66,9 @@ let getDataForTable = function(table, firstLoad, customQuery) {
 
 function handleRowsFromServer(data, firstLoad) {
   createTableFromData(data[0], data[1])
-  updateTableRowCount(data[2][0]["COUNT(*)"])
-  if (firstLoad && data[2][0]["COUNT(*)"] < 100)
-    limits.count = data[2][0]["COUNT(*)"] - 1
+  updateTableRowCount(data[2])
+  if (firstLoad && data[2] < 100)
+    limits.count = data[2] - 1
   fillLimitInputs()
   for(let i=0;i<currentTable.parentNode.children.length;i++){
     if (currentTable.parentNode.children[i] == currentTable) {
@@ -96,8 +97,8 @@ function createTableFromData(details, data) {
 function createHeaderRow(details) {
   let html = "<tr id='data-headers'>"
   for(let i=0;i<details.length;i++) {
-    currentColumns.push(details[i].Field)
-    html = html + "<th>" + details[i].Field + "</th>"
+    currentColumns.push(details[i])
+    html = html + "<th>" + details[i] + "</th>"
   }
   return(html = html + "</tr>")
 }
@@ -121,7 +122,7 @@ function highlightCorrectTable(newRow) {
   if (newRow == lastRow)
     return
   let table = document.getElementById('tables')
-  table.children[newRow].style.backgroundColor = '#a9d3fd'
+  table.children[newRow].style.backgroundColor = '#c6deea'
   table.children[lastRow].style.backgroundColor = ''
   lastRow = newRow;
 }
@@ -195,9 +196,8 @@ function RowClick(currenttr, lock) {
 }
 
 function toggleRow(row) {
-  console.log(row.classList)
-    row.className = (row == currentSelectedRow && row.className == "selected") ? '' : 'selected';
-    currentSelectedRow = row;
+  row.className = (row == currentSelectedRow && row.className == "selected") ? '' : 'selected';
+  currentSelectedRow = row;
 }
 
 function selectRowsBetweenIndexes(indexes) {
@@ -226,7 +226,7 @@ function deleteSelectRows(rows) {
   }
   let pageURL = window.location.href;
   let db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-  url = "/mysql/"+db+"/table/"+currentTable.innerHTML+"/delete_records"
+  url = "/"+currentDatabaseType+"/"+db+"/table/"+currentTable.innerHTML+"/delete_records"
   $.ajax({
     type: "POST",
     url: url,
@@ -321,7 +321,7 @@ function saveModalData(){
   }
   let pageURL = window.location.href;
   let db = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-  url = "/mysql/"+db+"/table/"+currentTable.innerHTML+"/row_update"
+  url = "/"+currentDatabaseType+"/"+db+"/table/"+currentTable.innerHTML+"/row_update"
   $.ajax({
     type: "POST",
     url: url,

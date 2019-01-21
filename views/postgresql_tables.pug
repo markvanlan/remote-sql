@@ -3,11 +3,11 @@ html
     title= "dbexplorer - " + database
     link(rel='stylesheet', href='/styles.css')
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
-    script(src="/mysql_tables.js", type="text/javascript")
+    script(src="/table.js", type="text/javascript")
     link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet')
   
-  body
-    .data-header 
+  body.postgres
+    .data-header
       h1(style="display:inline-block;")= database      
       .limits#clear(style="cursor:pointer")
         div Clear
