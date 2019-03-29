@@ -1,6 +1,7 @@
 # DBExplorer
 
-[dbexplorer screenshot](assets/dbexplorer.png)
+[[https://raw.githubusercontent.com/markvanlan/dbexplorer/master/assets/dbexplorer.png|alt=dbexplorer]]
+
 
 ### Installation
 ```bash
