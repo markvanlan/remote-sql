@@ -9,6 +9,11 @@ $ npm install -g dbexplorer
 ### Usage
 running
 ```bash
-$ dbexplorer
+$ dbexplorer # Server is running on port 8080
 ```
-will start the server. Navigate to localhost:8080
+
+You can alos specify a different port if you would like
+```bash
+$ dbexplorer 3000 # Server is running on port 3000
+
+```
