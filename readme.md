@@ -1,5 +1,7 @@
 # DBExplorer
 
+![dbexplorer screenshot](https://raw.githubusercontent.com/markvanlan/dbexplorer/master/assets/dbexplorer.png)
+
 ### Installation
 ```bash
 $ npm install -g dbexplorer
