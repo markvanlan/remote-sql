@@ -196,6 +196,11 @@ body.postgres .data-header h1 {
   overflow:scroll;
 }
 
+#data td {
+  width: 200px;
+  max-width: 200px;
+}
+
 tr {
   border: 1px solid gray;
 }
