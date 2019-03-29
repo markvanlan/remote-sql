@@ -1,13 +1,11 @@
 # DBExplorer
 
 ### Installation
-run
 ```bash
 $ npm install -g dbexplorer
 ```
 
 ### Usage
-running
 ```bash
 $ dbexplorer # Server is running on port 8080
 ```
