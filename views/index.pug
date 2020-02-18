@@ -1,4 +1,4 @@
-doctype 
+doctype
 html
   head
     title dbexplorer
@@ -15,11 +15,13 @@ html
       a#postgres-selector(href="#postgres") Postgres
 
     form.panel.overflow-hidden(
-      action="/mysql" 
+      action="/mysql"
       method="post"
       id="mysql"
     )
       label.large Connect To MySQL Database
+      if mysqlError
+        div.error Authentication Error! Try again
       input(
         type='text'
         name='host'
@@ -46,11 +48,13 @@ html
 
 
     form.panel.overflow-hidden(
-      action="/postgresql" 
+      action="/postgresql"
       method="post"
       id="postgres"
     )
       label.large Connect To Postgres Database
+      if error
+        div.error Authentication Error! Try again
       input(
         type='text'
         name='host'
