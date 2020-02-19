@@ -9,10 +9,10 @@ html
     link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet')
     link(href='/favicon.svg', rel='shortcut icon', type="image/svg")
 
-  body.bg-red-gradient
+  body.bg-blue-gradient
     .database-selector
       a#mysql-selector(href="#mysql") MySQL
-      a#postgres-selector(href="#postgres") Postgres
+      a#postgres-selector(href="#postgres") PostgreSQL
 
     form.panel.overflow-hidden(
       action="/mysql"
@@ -27,6 +27,7 @@ html
         name='host'
         id='mysql-host'
         placeholder='Host'
+        value=mysqlCredentials.host
       )
 
       input(
@@ -34,12 +35,21 @@ html
         name='user'
         id='mysql-user'
         placeholder='User'
+        value=mysqlCredentials.user
       )
       input(
         type='password'
         name='password'
         id='mysql-password'
         placeholder='Password'
+        value=mysqlCredentials.password
+      )
+      label Remember Credentials
+      input(
+        type='checkbox'
+        name='remember'
+        id='mysql-remember'
+        checked=mysqlCredentials.remember
       )
       input.submit.bg-red-gradient(
         type='submit'
@@ -52,14 +62,15 @@ html
       method="post"
       id="postgres"
     )
-      label.large Connect To Postgres Database
-      if error
+      label.large Connect To PostgreSQL Database
+      if postgresError
         div.error Authentication Error! Try again
       input(
         type='text'
         name='host'
         id='postgres-host'
         placeholder='Host'
+        value=postgresCredentials.host
       )
 
       input(
@@ -67,18 +78,28 @@ html
         name='user'
         id='postgres-user'
         placeholder='User'
+        value=postgresCredentials.user
       )
       input(
         type='password'
         name='password'
         id='postgres-password'
         placeholder='Password'
+        value=postgresCredentials.password
       )
       input(
         type='text'
         name='port'
         id='postgres-port'
         placeholder='Port'
+        value=postgresCredentials.port
+      )
+      label Remember Credentials
+      input(
+        type='checkbox'
+        name='remember'
+        id='postgres-remember'
+        checked=postgresCredentials.remember
       )
       input.submit.bg-blue-gradient(
         type='submit'

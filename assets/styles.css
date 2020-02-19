@@ -8,8 +8,8 @@ body {
   overflow: auto;
   transition: background .5s;
 }
-body::-webkit-scrollbar { 
-    display: none; 
+body::-webkit-scrollbar {
+    display: none;
 }
 
 ul {
@@ -24,7 +24,7 @@ a {
   background: linear-gradient(90deg,#ffbfbf,#da5555);
 }
 .bg-blue-gradient {
-  background: linear-gradient(90deg,#e5edff,#5578da);  
+  background: linear-gradient(90deg,#e5edff,#5578da);
 }
 
 .btn {
@@ -85,12 +85,11 @@ a {
 #mysql-selector {
   color:#da5555;
 }
+#mysql { display: none; }
 
 #postgres-selector {
-  color:#5578da; 
+  color:#5578da;
 }
-
-#postgres { display: none; }
 
 .panel label.large {
   display: block;
@@ -129,11 +128,11 @@ form input.submit {
   height:60px;
   border-bottom:1px solid #d6d6d6;
 }
-body.mysql .data-header { 
+body.mysql .data-header {
   background: linear-gradient(90deg,#ffbfbf,#da5555);
   color:#00440f;
 }
-body.postgres .data-header { 
+body.postgres .data-header {
   background: linear-gradient(90deg,#e5edff,#5578da);
   color:#00440f;
 }
@@ -142,10 +141,10 @@ body.postgres .data-header {
   padding-left:20px;
   font-size:20px;
 }
-body.mysql .data-header h1 { 
+body.mysql .data-header h1 {
   color:#da5555;
 }
-body.postgres .data-header h1 { 
+body.postgres .data-header h1 {
   color:#5578da;
 }
 
@@ -205,7 +204,7 @@ tr {
   border: 1px solid gray;
 }
 
-.db-logo-holder {  
+.db-logo-holder {
   position: absolute;
   width:260px;
   height:260px;
