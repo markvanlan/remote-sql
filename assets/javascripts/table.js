@@ -74,8 +74,7 @@ let getDataForTable = function(table, firstLoad, customQuery) {
     success: function(result) {
       handleRowsFromServer(result, firstLoad);
       dataRows = document
-        .getElementById("data")
-        .children[0].getElementsByTagName("tr");
+        .getElementById("data").getElementsByTagName("tr");
     },
     dataType: "JSON"
   });
@@ -105,8 +104,9 @@ function getRowsWithCustomQuery(query) {
 }
 
 function createTableFromData(details, data) {
-  $("#data").append(createHeaderRow(details));
-  $("#data").append(createDataRows(data));
+  const table = document.getElementById('data')
+  $(table).append(createHeaderRow(details));
+  createDataRows(data, table);
   addOnclickToRow();
 }
 
@@ -119,23 +119,22 @@ function createHeaderRow(details) {
   return (html = html + "</tr>");
 }
 
-function createDataRows(data) {
-  let html = "";
+function createDataRows(data, table) {
   for (let i = 0; i < data.length; i++) {
-    html = html + "<tr>";
+    let row = document.createElement('tr');
+    row.classList.add("data-row")
     for (let key in data[i]) {
-      html =
-        html +
-        "<td><div class='data-cell' data-column=" +
-        key +
-        ">" +
-        data[i][key] +
-        "</div></td>";
+      let td = document.createElement('td');
+      let textWrapper = document.createElement('div')
+      let text = document.createTextNode(data[i][key])
+      textWrapper.append(text)
+      textWrapper.classList.add('data-cell')
+      textWrapper.dataset.column = key
+      td.append(textWrapper)
+      row.append(td)
     }
-    for (let y = 0; y < data[i].length; y++) {}
-    html = html + "</tr>";
+    table.append(row)
   }
-  return html;
 }
 
 function highlightCorrectTable(newRow) {
@@ -163,8 +162,12 @@ function getLimitsFromInputs() {
 }
 
 function fillLimitInputs() {
-  $("#start").val(limits.offset);
-  $("#end").val(limits.offset + limits.count);
+  document.getElementById('start').value = limits.offset;
+  let end = (Number(limits.offset) + Number(limits.count)) - 1
+  if (end === 0) {
+    end = 1;
+  }
+  document.getElementById('end').value = end;
 }
 
 function addOnclickToRow() {
@@ -175,7 +178,7 @@ function addOnclickToRow() {
     });
   }
   for (let i = 1; i < rows.length; i++) {
-    $(rows[i]).click(function() {
+    rows[i].addEventListener('click', function() {
       RowClick(rows[i], false);
       showControlsIfNeeded();
     });
@@ -215,8 +218,7 @@ function RowClick(currenttr, lock) {
 }
 
 function toggleRow(row) {
-  row.className =
-    row == currentSelectedRow && row.className == "selected" ? "" : "selected";
+  row.classList.toggle("selected")
   currentSelectedRow = row;
 }
 
@@ -229,14 +231,14 @@ function selectRowsBetweenIndexes(indexes) {
   indexes.sort(function(a, b) {
     return a - b;
   });
-  for (var i = indexes[0]; i <= indexes[1]; i++) {
-    dataRows[i].className = "selected";
+  for (let i = indexes[0]; i <= indexes[1]; i++) {
+    dataRows[i].classList.add("selected");
   }
 }
 
 function clearAllSelectedRows(except) {
   for (var i = 0; i < dataRows.length; i++) {
-    except != dataRows[i] ? (dataRows[i].className = "") : null;
+    except != dataRows[i] ? (dataRows[i].classList.remove('selected')) : null;
   }
 }
 

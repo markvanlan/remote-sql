@@ -3,7 +3,7 @@ html
   head
     title dbexplorer
     link(rel='stylesheet', href='/stylesheets/styles.css')
-    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
+    script(src="/jquery.min.js")
     script(src="/javascripts/index.js")
     link(href="https://fonts.googleapis.com/css?family=Raleway:600" rel="stylesheet")
     link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet')
@@ -44,13 +44,14 @@ html
         placeholder='Password'
         value=mysqlCredentials.password
       )
-      label Remember Credentials
-      input(
-        type='checkbox'
-        name='remember'
-        id='mysql-remember'
-        checked=mysqlCredentials.remember
-      )
+      label.remember-creds
+        input(
+          type='checkbox'
+          name='remember'
+          id='mysql-remember'
+          checked=mysqlCredentials.remember
+        )
+        | Remember Credentials
       input.submit.bg-red-gradient(
         type='submit'
         value='Connect'
@@ -94,13 +95,14 @@ html
         placeholder='Port'
         value=postgresCredentials.port
       )
-      label Remember Credentials
-      input(
-        type='checkbox'
-        name='remember'
-        id='postgres-remember'
-        checked=postgresCredentials.remember
-      )
+      label.remember-creds
+        input(
+          type='checkbox'
+          name='remember'
+          id='postgres-remember'
+          checked=postgresCredentials.remember
+        )
+        | Remember Credentials
       input.submit.bg-blue-gradient(
         type='submit'
         value='Connect'
