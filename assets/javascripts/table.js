@@ -163,7 +163,7 @@ function getLimitsFromInputs() {
 
 function fillLimitInputs() {
   document.getElementById('start').value = limits.offset;
-  let end = (Number(limits.offset) + Number(limits.count)) - 1
+  let end = (Number(limits.offset) + Number(limits.count));
   if (end === 0) {
     end = 1;
   }
